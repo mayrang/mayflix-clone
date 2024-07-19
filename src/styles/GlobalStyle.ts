@@ -56,6 +56,6 @@ body {
 	font-family: "Source Sans 3", sans-serif;
 	font-weight: 500;
 	color: black;
-
+	min-height: 100dvh;
 }
 `;
