@@ -55,7 +55,8 @@ a {
 body {
 	font-family: "Source Sans 3", sans-serif;
 	font-weight: 500;
-	color: black;
+	color: ${(props) => props.theme.white.darker};
 	min-height: 100dvh;
+	background-color: black;
 }
 `;
