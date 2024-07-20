@@ -1,6 +1,6 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 
-interface IMovie {
+export interface IMovie {
   backdrop_path: string;
   id: number;
   overview: string;

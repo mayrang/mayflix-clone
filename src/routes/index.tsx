@@ -3,6 +3,7 @@ import Root from "./Root";
 import Home from "./Home";
 import Tv from "./Tv";
 import Search from "./Search";
+import Movie from "./Movie";
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,12 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+        children: [
+          {
+            path: "movie/:movieId",
+            element: <Movie />,
+          },
+        ],
       },
       {
         path: "tv",

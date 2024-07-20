@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
 import useWindowDimensions from "../hooks/useWindowDemesion";
+import { Outlet, PathMatch, useMatch, useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -54,17 +55,69 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ bgPhoto: string }>`
   height: 200px;
   color: red;
+  cursor: pointer;
   font-size: 36px;
   width: 100%;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center center;
   background-color: white;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
+
+const Info = styled(motion.div)`
+  background-color: ${(props) => props.theme.black.lighter};
+  padding: 10px;
+  top: 100%;
+  transform: translateY(-100%);
+  position: relative;
+  opacity: 0;
+  bottom: 0;
+  width: 100%;
+  h4 {
+    font-size: 14px;
+
+    text-align: center;
+  }
+`;
+
+const boxVariants = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      delay: 0.3,
+      type: "tween",
+    },
+  },
+};
+
+const infoVariants = {
+  normal: {
+    opacity: 0,
+  },
+  hover: {
+    opacity: 1,
+    transition: {
+      delay: 0.3,
+      type: "tween",
+    },
+  },
+};
 
 const offset = 6;
 
 export default function Home() {
+  const movieIdMatch: PathMatch<string> | null = useMatch("/movie/:movieId");
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery<IGetMovieResult>({
     queryKey: ["movies", "nowPlaying"],
     queryFn: getMovies,
@@ -84,7 +137,11 @@ export default function Home() {
     }
   };
   const toggleLeave = () => setLeaving((prev) => !prev);
-  console.log(data, isLoading);
+  const onClickBox = (movieId: number) => {
+    navigate(`/movie/${movieId}`);
+  };
+
+  console.log(data?.results.find((item) => item.id === +(movieIdMatch?.params.movieId as string)));
   return (
     <Wrapper style={{ height: "200vh" }}>
       {isLoading ? (
@@ -110,11 +167,34 @@ export default function Home() {
                   .slice(1)
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
-                    <Box bgPhoto={makeImagePath(movie.backdrop_path, "w500")} key={movie.id}></Box>
+                    <Box
+                      onClick={() => onClickBox(movie.id)}
+                      variants={boxVariants}
+                      layoutId={movie.id + ""}
+                      transition={{ type: "tween" }}
+                      initial="normal"
+                      whileHover="hover"
+                      bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                      key={movie.id}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
                   ))}
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {movieIdMatch ? (
+              <Outlet
+                context={{
+                  layoutId: movieIdMatch?.params.movieId as string,
+                  previewInfo: data?.results.find((item) => item.id === +(movieIdMatch?.params.movieId as string)),
+                }}
+              />
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
