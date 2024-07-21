@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/mayflix-clone/static/css/main.f855e6bc.css",
+    "main.js": "/mayflix-clone/static/js/main.2341ce88.js",
+    "index.html": "/mayflix-clone/index.html",
+    "main.f855e6bc.css.map": "/mayflix-clone/static/css/main.f855e6bc.css.map",
+    "main.2341ce88.js.map": "/mayflix-clone/static/js/main.2341ce88.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.2341ce88.js"
+  ]
+}
