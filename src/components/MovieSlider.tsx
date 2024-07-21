@@ -157,13 +157,6 @@ export default function MovieSlider({
     }
   }, [back, moving, data.results.length]);
 
-  console.log(
-    movieIdMatch,
-    data?.results.find((item) => item.id === +(movieIdMatch?.params.movieId as string)),
-    movieIdMatch?.params.movieId as string,
-    data.results,
-    title
-  );
   const onIncreaseIndex = async () => {
     if (data) {
       if (leaving) return;

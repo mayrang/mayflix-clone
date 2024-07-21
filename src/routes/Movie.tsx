@@ -129,7 +129,6 @@ export default function Movie() {
   };
   const [searchParams] = useSearchParams();
 
-  console.log(layoutId, "layout", previewInfo);
   return (
     <>
       <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onGoBack} />

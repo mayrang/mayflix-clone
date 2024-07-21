@@ -124,7 +124,6 @@ export default function Header() {
   const navAnimation = useAnimation();
   const { register, handleSubmit } = useForm<IForm>();
   const navigate = useNavigate();
-  console.log(homeMatch, tvMatch);
 
   useMotionValueEvent(scrollY, "change", () => {
     if (scrollY.get() > 80) {
@@ -178,7 +177,7 @@ export default function Header() {
             {homeMatch && <Circle layoutId="circle" />}
           </Item>
           <Item>
-            <Link to="/tv">Tv Shows</Link>
+            <Link to="tv">Tv Shows</Link>
             {tvMatch && <Circle layoutId="circle" />}
           </Item>
         </Items>

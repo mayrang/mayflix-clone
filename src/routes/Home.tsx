@@ -50,7 +50,6 @@ export default function Home() {
     { data: upcoming, isLoading: upcomingLoading },
   ] = useMovieMultipleQuery();
 
-  console.log(latest, nowPlaying);
   return (
     <Wrapper>
       {nowPlayingLoading ? (

@@ -128,14 +128,13 @@ export default function TvShow() {
     queryKey: ["tvShows", "detail", layoutId],
     queryFn: () => getTvDetail(+layoutId),
   });
-  console.log(data);
+
   const navigate = useNavigate();
   const onGoBack = () => {
     navigate(-1);
   };
   const [searchParams] = useSearchParams();
 
-  console.log(layoutId, "layout", previewInfo);
   return (
     <>
       <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onGoBack} />

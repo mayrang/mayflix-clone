@@ -139,7 +139,6 @@ export default function TvShowSlider({
   data: IGetTvShowResult;
   isSearch?: boolean;
 }) {
-  console.log(data);
   const window = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
