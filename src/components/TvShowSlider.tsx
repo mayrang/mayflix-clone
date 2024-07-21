@@ -178,7 +178,7 @@ export default function TvShowSlider({
     if (isSearch) {
       return;
     } else {
-      navigate(`tv/${tvShowId}?category=${title}`);
+      navigate(`${tvShowId}?category=${title}`);
     }
   };
   return (
