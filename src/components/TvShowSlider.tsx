@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDemesion";
 
 import { Outlet, useMatch, useNavigate } from "react-router-dom";
@@ -179,7 +179,7 @@ export default function TvShowSlider({
     if (isSearch) {
       return;
     } else {
-      navigate(`/tv/${tvShowId}?category=${title}`);
+      navigate(`tv/${tvShowId}?category=${title}`);
     }
   };
   return (

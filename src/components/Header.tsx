@@ -1,4 +1,4 @@
-import { motion, useAnimate, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion, useAnimation, useMotionValueEvent, useScroll } from "framer-motion";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useMatch, useNavigate } from "react-router-dom";
@@ -148,7 +148,7 @@ export default function Header() {
   };
 
   const onValid = (data: IForm) => {
-    navigate(`/search?keyword=${data.keyword}`);
+    navigate(`search?keyword=${data.keyword}`);
   };
 
   return (

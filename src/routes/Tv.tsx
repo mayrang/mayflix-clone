@@ -1,14 +1,7 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { getMovies, IGetMovieResult } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
-import { AnimatePresence, motion } from "framer-motion";
-import useWindowDimensions from "../hooks/useWindowDemesion";
-import { Outlet, PathMatch, useMatch, useNavigate } from "react-router-dom";
-import Slider from "../components/MovieSlider";
-import useMultipleQuery from "../hooks/useMovieMultipleQuery";
-import Latest from "../components/Latest";
+import { motion } from "framer-motion";
+
 import useTvMultiQuery from "../hooks/useTvMultiQuery";
 import TvShowSlider from "../components/TvShowSlider";
 import TvShowLatest from "../components/TvShowLatest";

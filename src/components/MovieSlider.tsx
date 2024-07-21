@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDemesion";
 import { IGetMovieResult } from "../api";
 import { Outlet, useMatch, useNavigate, useSearchParams } from "react-router-dom";
@@ -186,7 +186,7 @@ export default function MovieSlider({
     if (isSearch) {
       return;
     } else {
-      navigate(`/movie/${movieId}?category=${title}`);
+      navigate(`movie/${movieId}?category=${title}`);
     }
   };
   return (

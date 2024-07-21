@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IMovie, ITvShow } from "./../api";
+import { ITvShow } from "./../api";
 
 const Wrapper = styled.div`
   padding: 20px;

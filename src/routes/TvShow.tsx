@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { getMovieDetail, getTvDetail, IMovie, IMovieDetail, ITvShow, ITvShowDetail } from "../api";
+import { getTvDetail, ITvShow, ITvShowDetail } from "../api";
 import { makeImagePath } from "../utils";
 import { useQuery } from "react-query";
 
