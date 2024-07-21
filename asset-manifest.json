@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/mayflix-clone/static/css/main.f855e6bc.css",
-    "main.js": "/mayflix-clone/static/js/main.56d2468b.js",
+    "main.js": "/mayflix-clone/static/js/main.df64095c.js",
     "index.html": "/mayflix-clone/index.html",
     "main.f855e6bc.css.map": "/mayflix-clone/static/css/main.f855e6bc.css.map",
-    "main.56d2468b.js.map": "/mayflix-clone/static/js/main.56d2468b.js.map"
+    "main.df64095c.js.map": "/mayflix-clone/static/js/main.df64095c.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.56d2468b.js"
+    "static/js/main.df64095c.js"
   ]
 }
