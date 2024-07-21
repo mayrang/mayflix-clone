@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { getMovies, IGetMovieResult } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
-import { AnimatePresence, motion } from "framer-motion";
-import useWindowDimensions from "../hooks/useWindowDemesion";
-import { Outlet, PathMatch, useMatch, useNavigate } from "react-router-dom";
-import Slider from "../components/Slider";
+import { motion } from "framer-motion";
 
+import MovieSlider from "../components/MovieSlider";
+import useMovieMultipleQuery from "../hooks/useMovieMultipleQuery";
+import Latest from "../components/Latest";
 const Wrapper = styled.div`
   background-color: black;
   overflow-x: hidden;
@@ -35,41 +32,42 @@ const Overview = styled.p`
   width: 50%;
 `;
 
+const SliderWrapper = styled(motion.div)`
+  position: relative;
+  top: -170px;
+`;
+
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
 `;
 
 export default function Home() {
-  const movieIdMatch: PathMatch<string> | null = useMatch("/movie/:movieId");
+  const [
+    { data: nowPlaying, isLoading: nowPlayingLoading },
+    { data: latest, isLoading: latestLoading },
+    { data: topRated, isLoading: topRatedLoading },
+    { data: upcoming, isLoading: upcomingLoading },
+  ] = useMovieMultipleQuery();
 
-  const { data, isLoading } = useQuery<IGetMovieResult>({
-    queryKey: ["movies", "nowPlaying"],
-    queryFn: getMovies,
-  });
-
-  console.log(data?.results.find((item) => item.id === +(movieIdMatch?.params.movieId as string)));
+  console.log(latest, nowPlaying);
   return (
-    <Wrapper style={{ height: "200vh" }}>
-      {isLoading ? (
+    <Wrapper>
+      {nowPlayingLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+          <Banner bgPhoto={makeImagePath(nowPlaying?.results[0].backdrop_path || "")}>
+            <Title>{nowPlaying?.results[0].title}</Title>
+            <Overview>{nowPlaying?.results[0].overview}</Overview>
           </Banner>
-          {data && <Slider title={"Now Playing"} data={data} />}
-          <AnimatePresence>
-            {movieIdMatch ? (
-              <Outlet
-                context={{
-                  layoutId: movieIdMatch?.params.movieId as string,
-                  previewInfo: data?.results.find((item) => item.id === +(movieIdMatch?.params.movieId as string)),
-                }}
-              />
-            ) : null}
-          </AnimatePresence>
+          <SliderWrapper>
+            {nowPlaying && <MovieSlider title={"Now Playing"} data={nowPlaying} />}
+            {!topRatedLoading && topRated && <MovieSlider title={"Top Rated"} data={topRated} />}
+            {!upcomingLoading && upcoming && <MovieSlider title={"Upcoming"} data={upcoming} />}
+          </SliderWrapper>
+
+          {!latestLoading && latest && <Latest data={latest} />}
         </>
       )}
     </Wrapper>

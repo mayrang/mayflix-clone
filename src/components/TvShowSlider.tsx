@@ -1,14 +1,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDemesion";
-import { IGetMovieResult } from "../api";
-import { useMatch, useNavigate } from "react-router-dom";
+
+import { Outlet, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
+import { IGetTvShowResult } from "../api";
 
 const SliderWrapper = styled(motion.div)`
   position: relative;
-  top: -100px;
+  margin: 50px 0;
+  height: 250px;
 `;
 
 const Row = styled(motion.div)`
@@ -128,14 +130,23 @@ const Button = styled(motion.button)<{ arrow: "right" | "left" }>`
 
 const offset = 6;
 
-export default function Slider({ title, data }: { title: string; data: IGetMovieResult }) {
+export default function TvShowSlider({
+  title,
+  data,
+  isSearch = false,
+}: {
+  title: string;
+  data: IGetTvShowResult;
+  isSearch?: boolean;
+}) {
+  console.log(data);
   const window = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
   const [moving, setMoving] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const navigate = useNavigate();
-  const movieIdMatch = useMatch("/movie/:movieId");
+  const tvShowIdMatch = useMatch("/tv/:tvShowId");
   useEffect(() => {
     if (moving) {
       // 첫 영화를 빼야하므로
@@ -164,8 +175,12 @@ export default function Slider({ title, data }: { title: string; data: IGetMovie
     }
   };
   const toggleLeave = () => setLeaving((prev) => !prev);
-  const onClickBox = (movieId: number) => {
-    navigate(`/movie/${movieId}`);
+  const onClickBox = (tvShowId: number) => {
+    if (isSearch) {
+      return;
+    } else {
+      navigate(`/tv/${tvShowId}?category=${title}`);
+    }
   };
   return (
     <SliderWrapper initial="normal" whileHover="hover">
@@ -173,7 +188,7 @@ export default function Slider({ title, data }: { title: string; data: IGetMovie
         <h2>{title}</h2>
       </Title>
       <RowWrapper>
-        {!movieIdMatch && (
+        {!tvShowIdMatch && (
           <Button onClick={onDecreaseIndex} variants={buttonVariants} arrow={"left"}>
             <motion.svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
               <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
@@ -189,31 +204,31 @@ export default function Slider({ title, data }: { title: string; data: IGetMovie
             }}
             animate={{ x: 0 }}
             exit={{ x: back ? window : -window }}
-            key={index}
+            key={`${title}-${index}`}
           >
             {data?.results
               .slice(1)
               .slice(offset * index, offset * index + offset)
-              .map((movie) => (
+              .map((tvShow) => (
                 <Box
-                  onClick={() => onClickBox(movie.id)}
+                  onClick={() => onClickBox(tvShow.id)}
                   variants={boxVariants}
-                  layoutId={movie.id + ""}
+                  layoutId={`${title}-${tvShow.id}`}
                   transition={{ type: "tween" }}
                   initial="normal"
                   whileHover="hover"
-                  bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                  key={movie.id}
+                  bgPhoto={makeImagePath(tvShow.backdrop_path, "w500")}
+                  key={`${title}-${tvShow.id}`}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
+                    <h4>{tvShow.name}</h4>
                   </Info>
                 </Box>
               ))}
           </Row>
         </AnimatePresence>
 
-        {!movieIdMatch && (
+        {!tvShowIdMatch && (
           <Button onClick={onIncreaseIndex} variants={buttonVariants} arrow={"right"}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
               <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
@@ -221,6 +236,16 @@ export default function Slider({ title, data }: { title: string; data: IGetMovie
           </Button>
         )}
       </RowWrapper>
+      <AnimatePresence>
+        {tvShowIdMatch ? (
+          <Outlet
+            context={{
+              layoutId: tvShowIdMatch?.params.tvShowId as string,
+              previewInfo: data?.results.find((item) => item.id === +(tvShowIdMatch?.params.tvShowId as string)),
+            }}
+          />
+        ) : null}
+      </AnimatePresence>
     </SliderWrapper>
   );
 }

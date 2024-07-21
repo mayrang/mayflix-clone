@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { getMovieDetail, IMovie, IMovieDetail } from "../api";
+import { getMovieDetail, getTvDetail, IMovie, IMovieDetail, ITvShow, ITvShowDetail } from "../api";
 import { makeImagePath } from "../utils";
 import { useQuery } from "react-query";
 
@@ -110,19 +110,25 @@ const Genre = styled.div`
   }
 `;
 
+const Season = styled.div`
+  padding: 5px 20px;
+
+  font-size: 15px;
+`;
+
 const Overview = styled.p`
   padding: 15px 15px 30px 15px;
 
   color: ${(props) => props.theme.white.lighter};
 `;
 
-export default function Movie() {
-  const { layoutId, previewInfo } = useOutletContext<{ layoutId: string; previewInfo: IMovie | undefined }>();
-  const { data, isLoading } = useQuery<IMovieDetail>({
-    queryKey: ["movies", "detail", layoutId],
-    queryFn: () => getMovieDetail(+layoutId),
+export default function TvShow() {
+  const { layoutId, previewInfo } = useOutletContext<{ layoutId: string; previewInfo: ITvShow | undefined }>();
+  const { data, isLoading } = useQuery<ITvShowDetail>({
+    queryKey: ["tvShows", "detail", layoutId],
+    queryFn: () => getTvDetail(+layoutId),
   });
-
+  console.log(data);
   const navigate = useNavigate();
   const onGoBack = () => {
     navigate(-1);
@@ -133,7 +139,7 @@ export default function Movie() {
   return (
     <>
       <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onGoBack} />
-      <MovieBox layoutId={`${searchParams.get("category") || "Now Playing"}-${layoutId}`}>
+      <MovieBox layoutId={`${searchParams.get("category") || "Popular"}-${layoutId}`}>
         <Cover
           style={{
             backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
@@ -143,13 +149,14 @@ export default function Movie() {
           }}
         />
         <Wrapper>
-          <Title>{data?.title || previewInfo?.title}</Title>
-          <Date>{data?.release_date}</Date>
+          <Title>{data?.name || previewInfo?.name}</Title>
+          <Date>{data?.created_date}</Date>
           <Genre>
             {data?.genres.map((genre) => (
               <span>#{genre.name}</span>
             ))}
           </Genre>
+          <Season>Season {data?.seasons?.length || 1}</Season>
           <Flex>
             <PlayButton>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">

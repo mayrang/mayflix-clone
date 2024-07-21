@@ -4,6 +4,7 @@ import Home from "./Home";
 import Tv from "./Tv";
 import Search from "./Search";
 import Movie from "./Movie";
+import TvShow from "./TvShow";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,12 @@ export const router = createBrowserRouter([
       {
         path: "tv",
         element: <Tv />,
+        children: [
+          {
+            path: ":tvShowId",
+            element: <TvShow />,
+          },
+        ],
       },
       {
         path: "search",
